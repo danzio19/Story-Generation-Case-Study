@@ -21,18 +21,21 @@ def generate_story_from_topic(topic: str) -> schemas.StoryCreate:
     }
 
     prompt = f"""
-    You are an expert JSON-generating AI. Your sole task is to generate a single, valid, compact JSON object.
-    Do NOT use any newlines or formatting within the JSON structure. It must be a single line.
-    Do not include any text, explanations, or markdown formatting before or after the JSON object.
+    You are a JSON-generating AI that strictly follows instructions.
+    Your only task is to generate a single, valid, compact JSON object on a single line with no formatting.
+    Do not output any text, explanations, or markdown formatting before or after the JSON object.
     
     The user wants a short story based on the topic: "{topic}".
     
-    Generate a JSON object with the following exact keys: "title", "text", "questions".
-    - The "text" value should be a single paragraph.
-    - The "questions" value must be an array of exactly 3 objects.
-    - Each object in the "questions" array MUST have two keys: "question" and "answer".
+    The JSON object MUST have the following structure and keys: "title", "text", "questions".
+    - "title": A string for the story's title.
+    - "text": A string for the story's full text.
+    - "questions": An array of exactly 3 objects, each with "question" and "answer" string keys.
     
-    CRITICAL: The entire response must be a single-line, compact JSON object with no formatting.
+    CRITICAL: There must be no extra characters, commas, or any other text between the value of one key and the next key. The structure must be perfect.
+
+    EXAMPLE of a PERFECT response format:
+    {{"title":"Example Title","text":"This is the story text.","questions":[{{ "question":"Q1?","answer":"A1"}},{{"question":"Q2?","answer":"A2"}},{{"question":"Q3?","answer":"A3"}}]}}
     """
 
     data = {
