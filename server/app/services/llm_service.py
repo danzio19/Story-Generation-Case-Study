@@ -2,6 +2,7 @@ import requests
 import json
 from ..config import settings
 from .. import schemas
+import time
 
 # OpenRouter endpoint
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
@@ -44,38 +45,41 @@ def generate_story_from_topic(topic: str) -> schemas.StoryCreate:
         "response_format": {"type": "json_object"} 
     }
 
-    try:
-        response = requests.post(API_URL, headers=headers, json=data, timeout=60)
-        response.raise_for_status()
-        
-        response_json = response.json()
-        content_str = response_json["choices"][0]["message"]["content"]
-        
-        print("--- RAW LLM RESPONSE --- \n", content_str)
-        print("------------------------------") 
-
-        # ensure valid JSON
-        json_start_index = content_str.find('{')
-        json_end_index = content_str.rfind('}')
-
-        if json_start_index == -1 or json_end_index == -1:
-            raise json.JSONDecodeError("Could not find a JSON object in the LLM response.", content_str, 0)
-        
-        # extract json and parse
-        clean_json_str = content_str[json_start_index : json_end_index + 1]
-        story_data = json.loads(clean_json_str)
-
-        return schemas.StoryCreate(
-            title=story_data["title"],
-            text=story_data["text"],
-            questions=story_data["questions"],
-            llm_model=LLM_MODEL
-        )
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error occurred: {e}")
-        raise Exception(f"API request failed: {e}")
+    max_retries = 3
+    retry_delay_seconds = 2
     
-    except (KeyError, json.JSONDecodeError) as e:
-        print(f"Failed to parse LLM response: {e}")
-        raise Exception(f"Failed to parse LLM response: {e}")
+    last_exception = None
+    
+    for attempt in range(max_retries):
+        try:
+            print(f"Attempting LLM request ({attempt + 1}/{max_retries})...")
+            
+            response = requests.post(API_URL, headers=headers, json=data, timeout=90)
+            
+            response.raise_for_status()
+            
+            content_str = response.json()["choices"][0]["message"]["content"]
+            
+            try:
+                story_data = json.loads(content_str)
+            except json.JSONDecodeError:
+                unwrapped_str = json.loads(content_str)
+                story_data = json.loads(unwrapped_str)
+            
+            return schemas.StoryCreate(
+                title=story_data["title"],
+                text=story_data["text"],
+                questions=story_data["questions"],
+                llm_model=LLM_MODEL
+            )
+
+        except (requests.exceptions.RequestException, json.JSONDecodeError) as e:
+            print(f"Attempt {attempt + 1} failed. Error: {e}")
+            last_exception = e
+            if attempt < max_retries - 1:
+                time.sleep(retry_delay_seconds)
+            else:
+                # all retries failed
+                print("All retries failed.")
+                raise Exception(f"Failed to generate story from LLM after {max_retries} attempts.")
+    raise Exception(f"LLM story generation failed unexpectedly. Last error: {last_exception}")
