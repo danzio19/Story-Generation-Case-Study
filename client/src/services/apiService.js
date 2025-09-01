@@ -30,3 +30,13 @@ export const getStoryById = (id) => {
     return fetchApi(`/stories/${id}`);
 };
 
+export const createStoryFromTopic = (topic) => {
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ topic: topic }),
+    };
+    return fetchApi('/stories', options);
+};

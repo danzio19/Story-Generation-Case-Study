@@ -1,7 +1,7 @@
 
 import { Routes, Route } from 'react-router-dom';
 
-import StoryList from './components/StoryList';
+import HomePage from './pages/HomePage';
 import StoryDetail from './components/StoryDetail';
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
         </header>
 
         <Routes>
-          <Route path="/" element={<StoryList />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/story/:id" element={<StoryDetail />} />
         </Routes>
 
