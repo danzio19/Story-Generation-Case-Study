@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { createStoryFromTopic } from '../services/apiService';
 import { useNavigate } from 'react-router-dom';
 import Spinner from './Spinner';
+import { toast } from 'sonner';
 
 function NewStoryForm({ onSuccess, isSubmitting, onSubmittingChange }) {
     const [topic, setTopic] = useState('');
-    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
@@ -14,16 +14,18 @@ function NewStoryForm({ onSuccess, isSubmitting, onSubmittingChange }) {
         if (!topic.trim()) return;
 
         onSubmittingChange(true);
-        setError(null);
 
         try {
             const newStory = await createStoryFromTopic(topic);
+            toast.success('New story generated successfully!');
             if (onSuccess) {
+                console.log("New story created:", newStory);
                 onSuccess(newStory);
             }
             navigate(`/story/${newStory.id}`);
         } catch (e) {
-            setError(e.message || 'An unexpected error occurred.');
+            const errorMessage = e.message || 'An unexpected error occurred.';
+            toast.error(`Error: ${errorMessage}`);
         } finally {
             onSubmittingChange(false);
         }
@@ -50,7 +52,6 @@ function NewStoryForm({ onSuccess, isSubmitting, onSubmittingChange }) {
                         Create Story
                     </button>
                 </div>
-                {error && <p className="text-red-500 mt-4">Error: {error}</p>}
             </form>
         </div>
     );
