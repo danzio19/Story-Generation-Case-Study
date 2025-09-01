@@ -1,0 +1,60 @@
+# --- Python / FastAPI Server ---
+
+# Virtual Environment
+# This is the most important one. Never commit your virtual environment.
+venv/
+.venv/
+env/
+.env/
+__pycache__/
+
+# Database files
+# Your local database should not be version controlled.
+*.db
+*.sqlite3
+
+# Secrets file
+# Contains API keys and other secrets. NEVER COMMIT THIS.
+.env
+
+# IDE / Editor specific files
+.idea/
+.vscode/
+
+# Python build artifacts
+build/
+dist/
+*.egg-info/
+
+
+# --- Node.js / Frontend (for your future 'client' folder) ---
+
+# Dependencies
+# This is the frontend equivalent of 'venv'. It can be huge.
+node_modules/
+
+# Build output
+dist/
+build/
+.next/
+out/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+
+# --- OS / System Files ---
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
