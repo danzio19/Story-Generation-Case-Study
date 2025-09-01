@@ -7,6 +7,7 @@ import Modal from '../components/Modal';
 
 function HomePage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
@@ -29,8 +30,8 @@ function HomePage() {
 
             <StoryList />
 
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                <NewStoryForm onSuccess={handleStoryCreated} />
+            <Modal isOpen={isModalOpen} onClose={handleCloseModal} isLoading={isLoading}>
+                <NewStoryForm onSuccess={handleStoryCreated} isSubmitting={isLoading} onSubmittingChange={setIsLoading} />
             </Modal>
         </div>
     );
