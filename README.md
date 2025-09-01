@@ -16,6 +16,7 @@ This project is a full-stack web application that allows users to generate, view
 *   **OpenRouter**
     * OpenRouter acts as an aggregator for various LLMs, providing access to free models. This allowed for the implementation of the core AI feature without incurring any costs, and also offering flexibility in case we need to change the LLM used.
     Mistral 7B was chosen as the LLM to be used (for now).
+   OpenRouter URL is hardcoded in server code, which is not ideal but more practical for dev purposes.
 
 ### Frontend (/client)
 
