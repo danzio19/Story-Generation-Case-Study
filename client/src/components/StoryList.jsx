@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { getStories } from '../services/apiService';
-
+import { Link } from 'react-router-dom';
 
 const API_URL = 'http://127.0.0.1:8000/stories';
 
@@ -46,12 +46,14 @@ function StoryList() {
             ) : (
                 <ul className="divide-y divide-slate-800">
                     {stories.map((story) => (
-                        <li key={story.id} className="p-4 hover:bg-slate-800 rounded-md cursor-pointer transition-colors">
-                            <h3 className="text-xl font-bold">{story.title}</h3>
-                            <p className="text-sm text-slate-500">
-                                Created on: {new Date(story.created_at).toLocaleDateString()}
-                            </p>
-                        </li>
+                        <Link key={story.id} to={`/story/${story.id}`}>
+                            <li className="p-4 hover:bg-slate-800 rounded-md cursor-pointer transition-colors block">
+                                <h3 className="text-xl font-bold">{story.title}</h3>
+                                <p className="text-sm text-slate-500">
+                                    Created on: {new Date(story.created_at).toLocaleDateString()}
+                                </p>
+                            </li>
+                        </Link>
                     ))}
                 </ul>
             )}

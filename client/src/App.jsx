@@ -1,5 +1,9 @@
 
+import { Routes, Route } from 'react-router-dom';
+
 import StoryList from './components/StoryList';
+import StoryDetail from './components/StoryDetail';
+
 function App() {
   console.log("app started")
   return (
@@ -13,7 +17,11 @@ function App() {
             AI-Powered Story Generation
           </p>
         </header>
-        <StoryList />
+
+        <Routes>
+          <Route path="/" element={<StoryList />} />
+          <Route path="/story/:id" element={<StoryDetail />} />
+        </Routes>
 
       </main>
     </div>
