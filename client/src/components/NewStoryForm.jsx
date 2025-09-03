@@ -31,6 +31,12 @@ function NewStoryForm({ onSuccess, isSubmitting, onSubmittingChange }) {
         }
     };
 
+    const handleStreamingSubmit = () => {
+        if (!topic.trim()) return;
+        if (onSuccess) onSuccess();
+        navigate('/story/new', { state: { topic: topic } });
+    };
+
     return (
         <div>
             <h2 className="text-2xl font-semibold mb-4 text-white">Create a New Story</h2>
@@ -50,6 +56,14 @@ function NewStoryForm({ onSuccess, isSubmitting, onSubmittingChange }) {
                         disabled={isSubmitting} // <-- Use the prop
                     >
                         Create Story
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleStreamingSubmit}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md transition-colors disabled:bg-slate-600"
+                        disabled={isSubmitting}
+                    >
+                        Create Story (Streaming)
                     </button>
                 </div>
             </form>

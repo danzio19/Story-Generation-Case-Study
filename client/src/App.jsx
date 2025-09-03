@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import StoryDetail from './components/StoryDetail';
 import { Toaster } from 'sonner';
+import StoryViewPage from './pages/StoryViewPage';
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/story/:id" element={<StoryDetail />} />
+          <Route path="/story/:id" element={<StoryViewPage />} />
         </Routes>
 
       </main>
